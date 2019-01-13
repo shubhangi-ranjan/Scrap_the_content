@@ -1,0 +1,35 @@
+rom bs4 import BeautifulSoup
+import requests
+import pandas as pd
+from urllib2 import urlopen
+import lxml
+import numpy as np
+
+url='https://www.moneycontrol.com/stocksmarketsindia/'
+content= urlopen(url)
+
+soup=BeautifulSoup(content, 'lxml')
+
+data=soup.find(id='topgainer2')
+
+new_list=[]
+text= data.find_all('td')
+print text
+cells=str(text)
+clean_data=BeautifulSoup(cells,'lxml').get_text()
+print clean_data
+new_list.append(clean_data)
+    
+all_headers=[]
+col_labels=data.find_all('th')
+labels=str(col_labels)
+clean_labels=BeautifulSoup(labels,'lxml').get_text()
+all_headers.append(clean_labels)
+    
+df1=pd.DataFrame(all_headers)
+df2=df1[0].str.split(',',expand=True)
+print df2
+
+df=pd.DataFrame(new_list)
+df3=df[0].str.split(',',expand=True)
+print df3
